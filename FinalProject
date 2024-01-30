@@ -1,0 +1,178 @@
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static bool hasKey = false;
+    static bool hasMap = false;
+    static bool gameRunning = true;
+    static int attempts = 0;
+    static Dictionary<string, bool> visitedRooms = new Dictionary<string, bool>();
+
+    static void Main(string[] args)
+    {
+        Console.WriteLine("You are inside a mysterious mansion. Your goal is to find key items and solve riddles.");
+
+        while (gameRunning)
+        {
+            Console.WriteLine("Choose an action:\n1. Explore the mansion\n2. Approach an NPC\n3. Exit game");
+            string choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    ExploreMansion();
+                    break;
+                case "2":
+                    ApproachNPC();
+                    break;
+                case "3":
+                    Console.WriteLine("Exiting game.");
+                    gameRunning = false;
+                    break;
+                default:
+                    Console.WriteLine("Invalid action. Please choose again.");
+                    break;
+            }
+        }
+    }
+
+    static void ExploreMansion()
+    {
+        Console.WriteLine("Which room would you like to explore?\n1. Library\n2. Study Room\n3. Gallery");
+        string roomChoice = Console.ReadLine();
+
+        if (!visitedRooms.ContainsKey(roomChoice) || !visitedRooms[roomChoice])
+        {
+            switch (roomChoice)
+            {
+                case "1":
+                    Console.WriteLine("You enter the library and find a mysterious key.");
+                    hasKey = true;
+                    break;
+                case "2":
+                    Console.WriteLine("You enter the study room and find a cryptic map.");
+                    hasMap = true;
+                    break;
+                case "3":
+                    Console.WriteLine("You enter the gallery, but it seems empty.");
+                    break;
+                default:
+                    Console.WriteLine("This room doesn't exist in the mansion.");
+                    return;
+            }
+            visitedRooms[roomChoice] = true;
+        }
+        else
+        {
+            Console.WriteLine("You've already explored this room. It's empty now.");
+        }
+    }
+
+    static void ApproachNPC()
+    {
+        Console.WriteLine("You see a few NPCs. Whom do you approach?\n1. The Librarian\n2. The Historian\n3. The Artist");
+        string npcChoice = Console.ReadLine();
+
+        switch (npcChoice)
+        {
+            case "1":
+                SolveLibrarianRiddle();
+                break;
+            case "2":
+                SolveHistorianRiddle();
+                break;
+            case "3":
+                SolveArtistRiddle();
+                break;
+            default:
+                Console.WriteLine("No such NPC found.");
+                break;
+        }
+    }
+
+    static void SolveLibrarianRiddle()
+    {
+        if (hasKey)
+        {
+            Console.WriteLine("The Librarian asks: 'I am not alive, but I can grow. I don't have lungs, but I need air. What am I?'");
+            Console.WriteLine("Choose an answer:\n1. Fire\n2. Water\n3. Earth\n4. Wind");
+
+            string answer = Console.ReadLine();
+            if (answer == "1")
+            {
+                Console.WriteLine("The Librarian nods approvingly. 'Correct,' he says.");
+                WinGame();
+            }
+            else
+            {
+                IncorrectAnswer();
+            }
+        }
+        else
+        {
+            Console.WriteLine("The Librarian ignores you. You seem to lack something important.");
+        }
+    }
+
+    static void SolveHistorianRiddle()
+    {
+        if (hasMap)
+        {
+            Console.WriteLine("The Historian asks: 'I have cities, but no houses. I have mountains, but no trees. I have water, but no fish. What am I?'");
+            Console.WriteLine("Choose an answer:\n1. A map\n2. A dream\n3. A desert\n4. A story");
+
+            string answer = Console.ReadLine();
+            if (answer == "1")
+            {
+                Console.WriteLine("The Historian smiles. 'You are wise,' he says.");
+                WinGame();
+            }
+            else
+            {
+                IncorrectAnswer();
+            }
+        }
+        else
+        {
+            Console.WriteLine("The Historian looks away. You don't have what he seeks.");
+        }
+    }
+
+    static void SolveArtistRiddle()
+    {
+        Console.WriteLine("The Artist asks: 'What has keys but can't open locks?'");
+        Console.WriteLine("Choose an answer:\n1. A piano\n2. A heart\n3. A map\n4. A clock");
+
+        string answer = Console.ReadLine();
+        if (answer == "1")
+        {
+            Console.WriteLine("The Artist claps. 'Indeed, you understand!'");
+            WinGame();
+        }
+        else
+        {
+            IncorrectAnswer();
+        }
+    }
+
+    static void IncorrectAnswer()
+    {
+        attempts++;
+        if (attempts >= 2)
+        {
+            Console.WriteLine("You failed to solve the riddle. The NPC attacks you. Game over.");
+            gameRunning = false;
+        }
+        else
+        {
+            Console.WriteLine("That's not correct. Try again.");
+        }
+    }
+
+    static void WinGame()
+    {
+        Console.WriteLine("Congratulations! You've solved the riddle and won the game!");
+        gameRunning = false;
+    }
+}
